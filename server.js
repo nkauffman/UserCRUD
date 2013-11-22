@@ -1,13 +1,11 @@
-// server.js -------------------------------------------
+// ================== SERVER.JS ========================
 
-	// set up ==========================================
+	// set up ------------------------------------------
+	var api = require('./routes/api');
 	var express = require('express');
-	var app = express();
-	var mongoose = require('mongoose');
+	var app = express();	
 
-	// configuration ===================================
-	mongoose.connect('mongodb://localhost/newapp');
-
+	// configuration -----------------------------------
 	app.configure(function() {
 		app.use(express.static(__dirname + '/public'));
 		app.use(express.logger('dev'));
@@ -15,73 +13,19 @@
 		app.use(express.methodOverride());
 	});
 
-	// listen (start app with node server.js) ==========
+	// listen (start app with node server.js) ----------
 	app.listen(3000);
 	console.log("App listening on port 3000");
 
-// routes ----------------------------------------------
-	
-	// model definition ================================
-	var User = mongoose.model('users', {
-		userName: String
-	});
+	// routing -----------------------------------------
 
-
-	// api =============================================
-	app.get('/api/users', function(req, res) {
-
-		User.find(function(err, users) {
-			if (err)
-				res.send(err)
-
-			res.json(users);
-		});
-	});
-
-	app.post('/api/users', function(req, res) {
-
-		User.create({
-			userName: req.body.userName
-		}, function(err, users) {
-			res.send(users);
-		});
-
-
-	
-	});
-
-	app.put('/api/users/:_id', function(req, res) {
-
-		User.findById(req.params._id, function(err, users) {
-			users.userName = req.body.userName;
-			console.log(users);
-			users.save(function (err) {
-			
-				res.send(users);
-			});
-		});
-	});
-
-	app.delete('/api/users/:_id', function(req, res) {
-
-		User.remove({
-			_id: req.params._id
-		}, function(err, users) {
-			if (err)
-				res.send(err)
-
-			User.find(function(err, users) {
-				if (err)
-					res.send(err)
-
-				res.json(users);
-			});
-		});
-	});
-
-	
-
-	// application =====================================
+	// Main Page
 	app.get('/', function(req, res) {
 		res.sendfile('./public/index.html');
 	});
+
+	// API Routing
+	app.get('/api/users', api.read);
+	app.post('/api/users', api.create);
+	app.put('/api/users/:_id', api.update);
+	app.delete('/api/users/:_id', api.delete);

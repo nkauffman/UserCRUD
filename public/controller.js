@@ -34,5 +34,9 @@ function mainController($scope, $http) {
 				$scope.users = data;
 			});
 		});
+
+		$http.get('/api/users').success(function(data) {
+			$scope.users = data;
+		});
 	};
 }
