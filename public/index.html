@@ -1,0 +1,36 @@
+<!doctype html>
+<html ng-app="myApp">
+<head>
+	
+	<title>MEAN Stack CRUD App</title>
+	<script src="/vendor/angular/angular.min.js"></script>
+	<script src="controller.js"></script>
+
+</head>
+
+<body ng-controller="mainController">
+	
+	<div class="container">
+		<div id="person-form">		
+			<form>
+				
+				<div class="form-group">
+					<h1>Enter User Name:</h1>
+					<input type="text" ng-model="formData.userName">
+				</div>
+				
+				<button ng-click="createUser()">Create</button>
+
+				<h3>Current Users:</h3>
+				<ul ng-repeat="user in users">
+					<li> {{user.userName + " || ID: " + user._id}} </li>
+					<button ng-click="updateUser(user._id)">Update</button>
+					<button ng-click="deleteUser(user._id)">Delete</button>					
+				</ul>
+
+			</form>	
+		</div>
+	</div>
+
+</body>
+</html>
